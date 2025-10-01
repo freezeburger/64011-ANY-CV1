@@ -448,6 +448,253 @@ export class AxyTextField {
 *(laissez un commentaire dans le code renvoyant vers CVA standard avec `NG_VALUE_ACCESSOR`)*
 </details>
 
+<details>
+<summary>✅ Intégration profonde</summary>
+
+> components/axy-text-field/axy-text-field.component.ts
+
+```ts
+  import {
+  Component,
+  forwardRef,
+  effect,
+  signal,
+  computed,
+  inject,
+} from '@angular/core';
+import {
+  ControlValueAccessor,
+  NG_VALUE_ACCESSOR,
+  NgControl,
+} from '@angular/forms';
+
+type Appearance = 'outlined' | 'filled';
+
+@Component({
+  selector: 'axy-text-field',
+  standalone: true,
+  providers: [
+    // Fournit la ValueAccessor (intégration profonde aux forms)
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => AxyTextField),
+      multi: true,
+    },
+  ],
+  template: `
+    <label class="field" [class.filled]="appearance==='filled'" [attr.for]="inputId">
+      @if (label) {
+        <span class="label" [attr.id]="labelId">{{ label }}</span>
+      }
+
+      <input
+        [id]="inputId"
+        [attr.aria-labelledby]="label ? labelId : null"
+        [attr.aria-describedby]="describedBy"
+        [attr.aria-invalid]="ariaInvalid"
+        [required]="required"
+        [disabled]="disabled()"
+        [value]="value()"
+        (input)="onInput($event)"
+        (blur)="onBlur()"
+        [attr.placeholder]="placeholder ?? null"
+        [attr.type]="type"
+      />
+
+      @if (hint) { <small class="hint" [attr.id]="hintId">{{ hint }}</small> }
+
+      @if (showErrors()) {
+        <small class="error" [attr.id]="errorId">{{ firstErrorMessage() }}</small>
+      }
+    </label>
+  `,
+  host: {
+    class: 'axy-text-field-host',
+  },
+  styles: [`
+    :host{ display:block; }
+    .field{ display:grid; gap:.25rem; }
+    .label{ font-weight:600; }
+    .hint{ opacity:.75; }
+    .error{ color:crimson; }
+    .filled input{ background:#f6f6f6; }
+    input[aria-invalid="true"]{ outline: 2px solid rgba(220,20,60,.35); }
+  `],
+})
+export class AxyTextField implements ControlValueAccessor {
+  // -------- Inputs "simples" (non-signal pour compatibilité attributs) -----------
+  label?: string;
+  hint?: string;
+  placeholder?: string;
+  errorMessages?: Partial<Record<string, string>>; // map de messages personnalisés: { required: '...', minlength: '...' }
+  appearance: Appearance = 'outlined';
+  required = false;
+  type: string = 'text';
+
+  // -------- Intégration profonde aux Forms via CVA + NgControl -------------------
+  private ngControl = inject(NgControl, { self: true, optional: true });
+
+  // Affecte la ValueAccessor si utilisé dans un form (formControl/formControlName)
+  constructor() {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+    // Effet: si le contrôle devient disabled via API du FormControl
+    effect(() => {
+      const c = this.ngControl?.control;
+      if (!c) return;
+      // pas besoin d'observer ici; setDisabledState sera appelé par Angular si besoin
+    });
+  }
+
+  // -------- État interne (signals) ----------------------------------------------
+  value = signal<string>('');
+  disabled = signal<boolean>(false);
+  touched = signal<boolean>(false);
+
+  // A11y ids
+  inputId = `axy-tf-${Math.random().toString(36).slice(2, 9)}`;
+  labelId = `${this.inputId}-label`;
+  hintId  = `${this.inputId}-hint`;
+  errorId = `${this.inputId}-error`;
+
+  // DescribedBy dynamique
+  describedBy = computed(() => {
+    const ids: string[] = [];
+    if (this.hint)  ids.push(this.hintId);
+    if (this.showErrors()) ids.push(this.errorId);
+    return ids.length ? ids.join(' ') : null;
+  });
+
+  // Invalide si control en erreur + (touched || dirty)
+  invalid = computed(() => {
+    const c = this.ngControl?.control;
+    return !!c && c.invalid && (c.touched || c.dirty);
+  });
+
+  ariaInvalid = computed(() => (this.invalid() ? 'true' : 'false'));
+
+  // Affichage des erreurs
+  showErrors = computed(() => this.invalid());
+
+  firstErrorMessage = () => {
+    const c = this.ngControl?.control;
+    if (!c || !c.errors) return '';
+    const order = Object.keys(c.errors);
+    if (!order.length) return '';
+
+    const key = order[0]; // premier message
+    // Messages par défaut sobres
+    const builtins: Record<string, (e: any) => string> = {
+      required: () => 'Ce champ est requis.',
+      minlength: (e) => `Longueur minimale: ${e?.requiredLength}.`,
+      maxlength: (e) => `Longueur maximale: ${e?.requiredLength}.`,
+      email:     () => 'Adresse e-mail invalide.',
+      pattern:   () => 'Format invalide.',
+    };
+
+    if (this.errorMessages?.[key]) return this.errorMessages[key] as string;
+    if (builtins[key]) return builtins[key](c.errors[key]);
+    // fallback générique
+    return 'Valeur invalide.';
+  };
+
+  // -------- Handlers UI ----------------------------------------------------------
+  onInput(ev: Event) {
+    const next = (ev.target as HTMLInputElement).value;
+    this.value.set(next);
+    this._onChange(next);
+  }
+  onBlur() {
+    this.touched.set(true);
+    this._onTouched();
+  }
+
+  // -------- ControlValueAccessor -------------------------------------------------
+  private _onChange: (val: any) => void = () => {};
+  private _onTouched: () => void = () => {};
+
+  writeValue(v: any): void {
+    this.value.set(v ?? '');
+  }
+
+  registerOnChange(fn: (val: any) => void): void {
+    this._onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this._onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
+  }
+}
+```
+
+> Exemple d’utilisation — Reactive Forms (avec validations)
+
+```ts
+// app-lab/some-demo.component.ts (dans l'app de démo)
+import { Component } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { AxyTextField } from 'lib-axy/components/axy-text-field/axy-text-field.component';
+
+@Component({
+  standalone: true,
+  selector: 'app-text-field-demo',
+  imports: [ReactiveFormsModule, AxyTextField],
+  template: `
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <axy-text-field
+        formControlName="email"
+        label="Email"
+        placeholder="prenom.nom@domaine.tld"
+        [required]="true"
+        [errorMessages]="{
+          required: 'L’email est requis.',
+          email: 'Merci de saisir une adresse valide.'
+        }"
+      ></axy-text-field>
+
+      <axy-text-field
+        formControlName="username"
+        label="Nom d’utilisateur"
+        [required]="true"
+        [errorMessages]="{
+          required: 'Le nom d’utilisateur est requis.',
+          minlength: 'Au moins 3 caractères.'
+        }"
+      ></axy-text-field>
+
+      <button type="submit" [disabled]="form.invalid">Envoyer</button>
+    </form>
+
+    <pre>{{ form.value | json }}</pre>
+  `,
+})
+export class TextFieldDemoComponent {
+  private fb = inject(FormBuilder);
+  form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required, Validators.minLength(3)]],
+  });
+
+  submit() {
+    this.form.markAllAsTouched();
+    if (this.form.valid) {
+      // traiter la valeur
+      console.log(this.form.value);
+    }
+  }
+}
+
+```
+</details>
+
+<details>
+<summary>✅ Abstraction</summary>
+</details>
 
 ---
 
