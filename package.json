@@ -3,13 +3,15 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "compodoc:build": "compodoc -p tsconfig.doc.json",
-    "compodoc:build-and-serve": "compodoc -p tsconfig.doc.json -s",
-    "compodoc:serve": "compodoc -s"
+    "axy:build":"ng build --project lib-axy",
+    "app:start": "ng serve",
+    "preapp:build": "npm run axy:build",
+    "app:build": "ng build",
+    "app:watch": "ng build --watch --configuration development",
+    "app:test": "ng test",
+    "app:compodoc:build": "compodoc -p tsconfig.doc.json",
+    "app:compodoc:build-and-serve": "compodoc -p tsconfig.doc.json -s",
+    "app:compodoc:serve": "compodoc -s"
   },
   "private": true,
   "dependencies": {
