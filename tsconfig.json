@@ -15,6 +15,10 @@
       // chemin vers le code source de la lib axy (pour le dev)
       "axy-dev": [
         "./projects/lib-axy/src/public-api.ts"
+      ],
+      // alias pour les bridges
+      "@bridges/*": [
+        "./src/app/bridges/*"
       ]
     },
     "noImplicitReturns": true,

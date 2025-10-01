@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "preaxy:pack":"npm run axy:build",
+    "axy:pack":"npm pack ./dist/lib-axy --pack-destination artifacts",
     "axy:build":"ng build --project lib-axy",
     "app:start": "ng serve",
     "preapp:build": "npm run axy:build",
