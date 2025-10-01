@@ -1,0 +1,56 @@
+/**
+ * Styles for the axy-button html tag
+ */
+:host {
+  display: inline-block;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  inline-size: 100%;
+}
+
+@container (min-width: 420px) {
+  /* si conteneur queries activées autour */
+  button {
+    inline-size: auto;
+  }
+}
+.sm {
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.md {
+  font-size: 1rem;
+}
+
+.lg {
+  font-size: 1.125rem;
+  padding: 0.625rem 1.25rem;
+}
+
+.primary {
+  background: var(--axy-primary, CanvasText);
+  color: var(--axy-on-primary, Canvas);
+}
+
+.outline {
+  background: transparent;
+  color: var(--axy-primary, CanvasText);
+  outline: 2px solid currentColor;
+}
+
+.ghost {
+  background: transparent;
+  color: inherit;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
