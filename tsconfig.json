@@ -8,8 +8,13 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "paths": {
-      "lib-axy": [
+      // alias d'import pour la lib axy
+      "axy": [
         "./dist/lib-axy"
+      ],
+      // chemin vers le code source de la lib axy (pour le dev)
+      "axy-dev": [
+        "./projects/lib-axy/src/public-api.ts"
       ]
     },
     "noImplicitReturns": true,
