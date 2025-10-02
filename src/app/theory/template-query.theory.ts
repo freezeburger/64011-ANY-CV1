@@ -35,7 +35,7 @@ export class TemplateQueryTheory {
 
     // Accessing the generated component definition to see the content selectors
     // Attention: this is not a public API and may change without notice
-    ;
+
     console.log('Slots:', (TemplateQueryTheory as any)?.ɵcmp?.ngContentSelectors);
     console.log('Slots:', ɵgetComponentDef(TemplateQueryTheory)?.ngContentSelectors);
 
