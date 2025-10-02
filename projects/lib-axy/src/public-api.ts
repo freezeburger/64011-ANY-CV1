@@ -12,6 +12,15 @@
  * ng build --project lib-axy
  */
 
+
+/**
+ * Components
+ */
 export * from './lib/components/header/header.component';
 export * from './lib/components/footer/footer.component';
 export * from './lib/components/axy-button/axy-button.component';
+
+/**
+ * Directives
+ */
+export * from './lib/directives/axy-long-press.directive';

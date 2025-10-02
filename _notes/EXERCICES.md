@@ -148,7 +148,7 @@ export class AxyLongPress {
   onUp(success = false) {
     cancelAnimationFrame(this.raf);
     this.raf = 0;
-    const bar = this.el.nativeElement.querySelector<HTMLElement>(':scope > .axy-longpress-bar');
+    const bar = this.el.nativeElement.querySelector(':scope > .axy-longpress-bar');
     if (bar) {
       bar.style.opacity = success ? '0' : '0.2';
       bar.style.transition = 'opacity .2s ease';
@@ -157,7 +157,7 @@ export class AxyLongPress {
   }
 
   private ensureBar() {
-    let bar = this.el.nativeElement.querySelector<HTMLElement>(':scope > .axy-longpress-bar');
+    let bar = this.el.nativeElement.querySelector(':scope > .axy-longpress-bar');
     if (!bar) {
       bar = document.createElement('div');
       Object.assign(bar.style, {
