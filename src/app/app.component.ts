@@ -7,16 +7,28 @@ import { PipeTheory } from './theory/pipe.theory';
 import { DirectiveTheory } from './theory/directive.theory';
 import { DirectiveCompositionTheory } from './theory/directive-composition.theory';
 import { InheritanceTheory } from './theory/inheritance.theory';
+import { DirectiveInheritance, DirectiveInheritanceTheory } from './theory/directive-inheritance.theory';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, SlotTheory,  AxyButton, PipeTheory, DirectiveTheory, DirectiveCompositionTheory, InheritanceTheory],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    SlotTheory,
+    AxyButton,
+    PipeTheory,
+    DirectiveTheory,
+    DirectiveCompositionTheory,
+    InheritanceTheory,
+    DirectiveInheritance,
+    DirectiveInheritanceTheory
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'app-lab';
 
-  variants:Array<Appearances> = ['primary', 'outline', 'ghost'];
+  variants: Array<Appearances> = ['primary', 'outline', 'ghost'];
 
   constructor() {
     setInterval(() => {
