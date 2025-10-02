@@ -1,4 +1,4 @@
-import { Component, Directive, Host, HostBinding, HostListener } from '@angular/core';
+import { Component, ComponentRef, Directive, ElementRef, Host, HostBinding, HostListener, Inject } from '@angular/core';
 
 @Directive({
   // Ici on cible uniquement les <p> avec l'attribut appHighlight
@@ -12,7 +12,9 @@ class HighlightDirective {
   // Liaison alternative avec HostBinding (Non recommandée si pas de logique)
   // @HostBinding('style.backgroundColor') backgroundColor = 'yellow';
 
-  constructor() {
+  constructor(
+    // @Inject(DirectiveTheory) private comp: ComponentRef<DirectiveTheory>
+  ) {
     console.log('appHighlight');
   }
 
