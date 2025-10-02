@@ -1,4 +1,4 @@
-import { Component, Directive } from '@angular/core';
+import { Component, Directive, inject, Injectable } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SlotTheory } from './theory/slot.theory';
 
@@ -8,6 +8,28 @@ import { DirectiveTheory } from './theory/directive.theory';
 import { DirectiveCompositionTheory } from './theory/directive-composition.theory';
 import { InheritanceTheory } from './theory/inheritance.theory';
 import { DirectiveInheritance, DirectiveInheritanceTheory } from './theory/directive-inheritance.theory';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ServiceA {
+  constructor(dep: ServiceB) {
+    console.log('ServiceA created');
+  }
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ServiceB {
+  constructor(private dep: ServiceA) {
+    console.log('ServiceB created');
+  }
+}
+
+
+
 @Component({
   selector: 'app-root',
   imports: [
@@ -21,7 +43,7 @@ import { DirectiveInheritance, DirectiveInheritanceTheory } from './theory/direc
     InheritanceTheory,
     DirectiveInheritance,
     DirectiveInheritanceTheory
-],
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -29,6 +51,8 @@ export class AppComponent {
   title = 'app-lab';
 
   variants: Array<Appearances> = ['primary', 'outline', 'ghost'];
+
+  dep = inject(ServiceA);
 
   constructor() {
     setInterval(() => {
