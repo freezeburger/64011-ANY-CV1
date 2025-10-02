@@ -246,42 +246,71 @@ ng g c components/axy-virtual-list --project=lib-axy
 
 **`components/axy-virtual-list/axy-virtual-list.component.ts`**
 ```ts
-import { Component, TemplateRef, ViewChild, ViewContainerRef, input } from '@angular/core';
-import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
+import { Component, TemplateRef, contentChild, input } from '@angular/core';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NgTemplateOutlet } from '@angular/common';
 
+/**
+ * Usage :
+ * <axy-virtual-list [items]="items">
+ *   <ng-template let-item>
+ *     <div class="row">{{ item.label }}</div>
+ *   </ng-template>
+ * </axy-virtual-list>
+ */
 @Component({
   selector: 'axy-virtual-list',
   standalone: true,
   imports: [ScrollingModule, NgTemplateOutlet],
   template: `
     <cdk-virtual-scroll-viewport
-      [itemSize]="itemSize()" [style.height.px]="viewportHeight()">
-      @for (item of items(); track item) {
-        <ng-container
-          [ngTemplateOutlet]="tpl"
-          [ngTemplateOutletContext]="{ $implicit: item }">
-        </ng-container>
+      [itemSize]="itemSize()"
+      [style.height.px]="viewportHeight()"
+    >
+      @if (tpl()) {
+        @for (item of items(); track item) {
+          <ng-container
+            [ngTemplateOutlet]="tpl()"
+            [ngTemplateOutletContext]="{ $implicit: item }">
+          </ng-container>
+        }
+      } @else {
+        <!-- Optionnel: fallback si aucun <ng-template> fourni -->
+        <div class="axy-virtual-list__placeholder">
+          Aucun template fourni (slot <ng-template> manquant).
+        </div>
       }
     </cdk-virtual-scroll-viewport>
-  `
+  `,
 })
 export class AxyVirtualList<T> {
-  items = input<readonly T[]>([]);      // Alternative: @Input() items: readonly T[] = [];
+  /** Données à lister (immuables de préférence) */
+  items = input<readonly T[]>([]);
+
+  /** Hauteur d’un item (px) pour le viewport virtuel */
   itemSize = input<number>(40);
+
+  /** Hauteur du viewport (px) */
   viewportHeight = input<number>(320);
 
-  // fournie par l’usage
-  tpl!: TemplateRef<T>;
+  /**
+   * Récupère le premier <ng-template> projeté.
+   * Version fonctionnelle (API signal) : tpl() renvoie TemplateRef<T>|undefined
+   */
+  tpl = contentChild<TemplateRef<T>>(TemplateRef);
+
+  // Variante "exigeante" (décommentez pour rendre obligatoire le template) :
+  // tpl = contentChild.required<TemplateRef<T>>(TemplateRef);
 }
+
 ```
 
 **Utilisation** :
 ```html
-<axy-virtual-list [items]="bigArray" [itemSize]="48" [viewportHeight]="480">
-  <ng-template let-item #tpl>
-    <div class="row">{{ item.label }}</div>
-  </ng-template>
+<axy-virtual-list [items]="items">
+    <ng-template let-item>
+      <div class="row">{{ item.label }}</div>
+   </ng-template>
 </axy-virtual-list>
 ```
 </details>
