@@ -5,9 +5,10 @@ import { SlotTheory } from './theory/slot.theory';
 import { Appearances, AxyButtonComponent as AxyButton, HeaderComponent } from '@bridges/axy';
 import { PipeTheory } from './theory/pipe.theory';
 import { DirectiveTheory } from './theory/directive.theory';
+import { DirectiveCompositionTheory } from './theory/directive-composition.theory';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, SlotTheory,  AxyButton, PipeTheory, DirectiveTheory],
+  imports: [RouterOutlet, HeaderComponent, SlotTheory,  AxyButton, PipeTheory, DirectiveTheory, DirectiveCompositionTheory],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
