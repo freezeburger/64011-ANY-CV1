@@ -3,9 +3,10 @@ import { RouterOutlet } from '@angular/router';
 import { SlotTheory } from './theory/slot.theory';
 
 import { Appearances, AxyButtonComponent as AxyButton, HeaderComponent } from '@bridges/axy';
+import { PipeTheory } from './theory/pipe.theory';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, SlotTheory,  AxyButton],
+  imports: [RouterOutlet, HeaderComponent, SlotTheory,  AxyButton, PipeTheory],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
