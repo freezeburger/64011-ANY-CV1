@@ -1,4 +1,37 @@
 Application
 <axy-header></axy-header>
 
-<app-template-query><span #content>Content projection works!</span></app-template-query>
+<axy-button
+    axyLongPress
+    appearance="outline"
+    [disabled]="activations.first"
+    (activated)=" activations.first = true ">
+  <code axyLongPressTarget>Axy Button</code>
+</axy-button>
+
+{{ activations.first ? 'Disabled after LongPress' : 'Enabled'}}
+
+<hr>
+
+<axy-button
+  axyLongPress
+  appearance="outline"
+  [disabled]="activations.second"
+  (activated)=" activations.second = true ">
+  Axy Button
+</axy-button>
+
+{{ activations.second ? 'Disabled after LongPress' : 'Enabled'}}
+
+<hr>
+
+<axy-button
+  axyLongPress
+  appearance="ghost"
+  [disabled]="activations.third"
+  (activated)=" activations.third = true ">
+  Axy Button
+</axy-button>
+
+{{ activations.third ? 'Disabled after LongPress' : 'Enabled'}}
+

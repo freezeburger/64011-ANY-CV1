@@ -1,73 +1,109 @@
-import { Directive, ElementRef, inject, output } from '@angular/core';
+import {
+  computed,
+  Directive,
+  input,
+  signal,
+  effect,
+  output,
+  untracked,
+  inject,
+  ElementRef,
+  contentChild
+} from '@angular/core';
+
+@Directive({
+  selector: '[axyLongPressTarget]'
+})
+export class AxyLongPressTargetDirective {
+  // Just a marker directive
+  host = inject(ElementRef<HTMLElement>);
+}
 
 @Directive({
   selector: '[axyLongPress]',
-  standalone: true,
   host: {
-    '(pointerdown)': 'onDown($event)',
-    '(pointerup)': 'onUp()',
-    '(pointerleave)': 'onUp()',
-    '(keydown.space)': 'onDown($event)',
-    '(keyup.space)': 'onUp()',
-    'style.position': 'relative',
-    'style.overflow': 'hidden',
+    /* '[style.background]': 'background()', */
+    '(mousedown)': 'start()',
+    '(mouseup)': 'cancel()',
+    '(mouseleave)': 'cancel()',
+    'tabindex': '0',
+    'role': 'button',
+    ['style.cursor']: `'pointer'`
   }
 })
-export class AxyLongPress {
+export class AxyLongPressDirective {
 
-  private el = inject(ElementRef<HTMLElement>);
+  public duration = input<number>(1000); // Durée en ms
+  public color = input<'crimson' | 'lightgreen' | 'orange'>('lightgreen'); // Couleur de fond
+  public activated = output<void>();
 
-  activated = output<void>(); // Alternative: @Output() activated = new EventEmitter<void>();
+  private pressed = signal<boolean>(false);
+  private progress = signal<number>(0);
+  private background = computed(() => `linear-gradient(to right, ${this.color()} ${this.progress()}%, transparent ${this.progress()}%)`);
 
-  private timer: any = null;
-  private startTs = 0;
-  private raf = 0;
-  private dur = 800;
+  private customTarget = contentChild(AxyLongPressTargetDirective, { descendants: true});
+  private host = inject(ElementRef<HTMLElement>);
+  private target:ElementRef<HTMLElement> = this.customTarget()?.host ?? this.host;
 
-  onDown(ev: Event) {
-    ev.preventDefault();
-    if (this.timer) return;
-    this.startTs = performance.now();
-    const bar = this.ensureBar();
-    bar.style.width = '0%';
-    bar.style.opacity = '1';
+  private readonly FRAME_DURATION = 1000 / 60; // Durée d'une frame en ms (~60fps) ou 16.67ms
+  private readonly INCREMENT = untracked(() => 100 / (this.duration() / this.FRAME_DURATION));
 
-    const tick = () => {
-      const p = Math.min(1, (performance.now() - this.startTs) / this.dur);
-      bar.style.width = (p * 100).toFixed(2) + '%';
-      if (p >= 1) {
-        this.onUp(true);
-        this.activated.emit();
-      } else {
-        this.raf = requestAnimationFrame(tick);
-      }
-    };
-    this.raf = requestAnimationFrame(tick);
+  private timer: ReturnType<typeof setInterval> | null = null;
+
+  private activatedState = false;
+
+  ngAfterViewInit() {
+    this.target = this.customTarget()?.host ?? this.host;
+    console.log("LongPress Target", this.target);
+    this.activated.subscribe(() => {
+      this.activatedState = true;
+    });
   }
 
-  onUp(success = false) {
-    cancelAnimationFrame(this.raf);
-    this.raf = 0;
-    const bar = this.el.nativeElement.querySelector(':scope > .axy-longpress-bar');
-    if (bar) {
-      bar.style.opacity = success ? '0' : '0.2';
-      bar.style.transition = 'opacity .2s ease';
+  protected start(): void {
+    this.pressed.set(true);
+  }
+
+  protected cancel(): void {
+    this.pressed.set(false);
+  }
+
+  private activation = effect(onCleanup => {
+
+    if (this.progress() >= 100 && !this.activatedState) {
+      console.log("LongPress Activated");
+      this.activated.emit();
     }
-    this.timer = null;
-  }
 
-  private ensureBar() {
-    let bar = this.el.nativeElement.querySelector(':scope > .axy-longpress-bar');
-    if (!bar) {
-      bar = document.createElement('div');
-      Object.assign(bar.style, {
-        position: 'absolute', inset: 'auto 0 0 0', height: '3px',
-        background: 'currentColor', opacity: '0', width: '0%',
-        pointerEvents: 'none'
-      });
-      bar.className = 'axy-longpress-bar';
-      this.el.nativeElement.appendChild(bar);
+  });
+
+  private cleanup = effect(() => {
+
+    console.log("LongPress Finished : Cleanup");
+
+    this.timer && clearInterval(this.timer);
+    if (!this.pressed() && this.progress() > 0 && this.progress() < 100) {
+      this.progress.set(0);
     }
-    return bar;
-  }
+
+  });
+
+  private render = effect(() => {
+    this.target.nativeElement.style.background = this.background();
+  });
+
+  private progression = effect(() => {
+
+    if (this.pressed()) {
+
+      console.log("LongPress Started", this.INCREMENT);
+
+      const mutate = () => {
+        this.progress.update((prev: number) => prev + this.INCREMENT);
+      };
+
+      this.timer = setInterval(mutate, this.FRAME_DURATION);
+    }
+  });
+
 }
