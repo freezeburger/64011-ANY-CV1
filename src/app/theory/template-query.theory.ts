@@ -20,6 +20,7 @@ import { AxyButtonComponent } from 'axy-dev';
 export class TemplateQueryTheory {
 
   protected host = inject(ElementRef<HTMLElement>).nativeElement;
+
   protected container = viewChild<ElementRef<HTMLDivElement>>('container');
   protected button = viewChild(AxyButtonComponent);
 
@@ -28,6 +29,8 @@ export class TemplateQueryTheory {
 
   ngAfterViewInit() {
     console.log('Host:', this.host);
+    console.log( 'Query From Host', this.host.nativeElement.querySelectorAll('axy-button') );
+
     console.log('Container:', this.container()?.nativeElement);
     console.log('Button:', this.button());
     console.log('List items:', this.listItems());
