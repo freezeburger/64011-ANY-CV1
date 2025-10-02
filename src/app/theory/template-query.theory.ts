@@ -25,11 +25,12 @@ export class TemplateQueryTheory {
   protected button = viewChild(AxyButtonComponent);
 
   protected listItems = viewChildren<ElementRef<HTMLLIElement>>('listItem');
+
   protected contents = contentChildren<ElementRef<HTMLElement>>('content');
 
   ngAfterViewInit() {
     console.log('Host:', this.host);
-    console.log( 'Query From Host', this.host.nativeElement.querySelectorAll('axy-button') );
+    console.log( 'Query From Host', this.host.querySelectorAll('axy-button') );
 
     console.log('Container:', this.container()?.nativeElement);
     console.log('Button:', this.button());
@@ -40,8 +41,7 @@ export class TemplateQueryTheory {
     // Attention: this is not a public API and may change without notice
 
     console.log('Slots:', (TemplateQueryTheory as any)?.ɵcmp?.ngContentSelectors);
-    console.log('Slots:', ɵgetComponentDef(TemplateQueryTheory)?.ngContentSelectors);
-
+    console.log('Component Definition :', ɵgetComponentDef(TemplateQueryTheory) );
 
   }
 
