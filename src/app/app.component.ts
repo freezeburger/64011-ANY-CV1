@@ -8,6 +8,7 @@ import { DirectiveTheory } from './theory/directive.theory';
 import { DirectiveCompositionTheory } from './theory/directive-composition.theory';
 import { InheritanceTheory } from './theory/inheritance.theory';
 import { DirectiveInheritance, DirectiveInheritanceTheory } from './theory/directive-inheritance.theory';
+import { TemplateQueryTheory } from './theory/template-query.theory';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ import { DirectiveInheritance, DirectiveInheritanceTheory } from './theory/direc
     DirectiveCompositionTheory,
     InheritanceTheory,
     DirectiveInheritance,
-    DirectiveInheritanceTheory
+    DirectiveInheritanceTheory,
+    TemplateQueryTheory
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
