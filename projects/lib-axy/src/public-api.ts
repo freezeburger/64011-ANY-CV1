@@ -32,3 +32,4 @@ export * from './lib/components/axy-card/axy-card.component';
  * Directives
  */
 export * from './lib/directives/axy-long-press.directive';
+export * from './lib/directives/axy-base-css.directive';

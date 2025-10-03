@@ -1,45 +1,121 @@
-:host{ display:block; --surface: var(--ui-surface,#121621); }
-/* Colors → accent */
-:host(.c-crimson)    { --accent: hsl(350 80% 52%); }
-:host(.c-lightgreen) { --accent: hsl(135 60% 45%); }
-:host(.c-orange)     { --accent: hsl( 28 90% 52%); }
+/* axy-card.component.scss */
 
-.card{
-  background: var(--surface);
-  color: var(--ui-text,#f5f7ff);
-  border-radius: var(--ui-radius,14px);
-  border: 1px solid color-mix(in oklab, var(--accent) 16%, transparent);
-  display:grid; gap:12px; overflow: clip;
-  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+/* ========= Base & font ========= */
+:host {
+  display: block;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Noto Sans", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  /* maxWidth est déjà bindé inline depuis le template */
+  --surface: #0f1524;   /* base night blue douce */
+  --surface-2: #141b2c; /* couche supérieure */
+  --surface-3: #1a2236; /* surbrillance hover */
+  --text: #eef3ff;
+  --muted: #a8b2c8;
+  --radius: 14px;
+  --shadow: 0 10px 28px rgba(8,12,20,.28);
+  --bd-weak: 1px solid rgba(255,255,255,.06);
+  --bd-strong: 1px solid rgba(255,255,255,.16);
+}
+
+/* ========= Accent (piloté par c-*) ========= */
+:host(.c-crimson) {
+  --accent: hsl(350 80% 54%);
+  --accent-weak: color-mix(in oklab, var(--accent) 22%, transparent);
+  --accent-strong: color-mix(in oklab, var(--accent) 36%, transparent);
+  --accent-bg-weak: color-mix(in oklab, var(--accent) 10%, transparent);
+}
+:host(.c-lightgreen) {
+  --accent: hsl(135 58% 46%);
+  --accent-weak: color-mix(in oklab, var(--accent) 22%, transparent);
+  --accent-strong: color-mix(in oklab, var(--accent) 36%, transparent);
+  --accent-bg-weak: color-mix(in oklab, var(--accent) 10%, transparent);
+}
+:host(.c-orange) {
+  --accent: hsl(28 90% 54%);
+  --accent-weak: color-mix(in oklab, var(--accent) 22%, transparent);
+  --accent-strong: color-mix(in oklab, var(--accent) 36%, transparent);
+  --accent-bg-weak: color-mix(in oklab, var(--accent) 10%, transparent);
+}
+
+/* ========= Carte (par défaut neutre) ========= */
+.card {
+  background: color-mix(in oklab, var(--surface) 96%, white 4%);
+  color: var(--text);
+  border-radius: var(--radius);
+  border: var(--bd-weak);
+  display: grid;
+  gap: 12px;
+  overflow: clip;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+
+  &.clickable { cursor: pointer; }
+  &.clickable:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+}
+
+/* ========= Rythme (Sizes) ========= */
+:host(.sz-sm) {
+  .header { padding: 10px 12px 0; }
+  .content { padding: 0 12px 8px; }
+  .actions { padding: 8px 12px 12px; }
+}
+:host(.sz-md) {
+  .header { padding: 14px 16px 0; }
+  .content { padding: 0 16px 10px; }
+  .actions { padding: 10px 16px 16px; }
+}
+:host(.sz-lg) {
+  .header { padding: 18px 20px 0; }
+  .content { padding: 0 20px 12px; }
+  .actions { padding: 12px 20px 20px; }
+}
+
+/* ========= Slots / typo ========= */
+.media :where(img,video,canvas,svg){ display:block; width:100%; height:auto; }
+.header { font-weight: 650; letter-spacing: .2px; }
+.header :where(h1,h2,h3,h4,h5){ margin:0; color: color-mix(in oklab, var(--text) 94%, white 6%); }
+.content { color: color-mix(in oklab, var(--text) 88%, white 12%); }
+.content :where(p,li){ margin-block: .4rem; }
+.actions {
+  display:flex; gap:10px; align-items:center; justify-content:flex-end;
+  border-top: var(--bd-weak);
+  background: color-mix(in oklab, var(--surface-2) 82%, transparent);
+}
+
+/* ========= Variants (Appearances) ========= */
+/* 1) primary : forte mise en avant + ombre + accent “tonique” */
+:host(.primary) .card, .card.primary {
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--surface) 86%, white 14%) 0%,
+      color-mix(in oklab, var(--surface) 94%, white 6%) 100%);
+  border: 1px solid transparent;
+  box-shadow: var(--shadow);
+}
+:host(.primary) .header { background: var(--accent-bg-weak); }
+:host(.primary) .actions { border-top: 1px solid var(--accent-weak); }
+
+/* 2) outline : bord aux couleurs de l’accent, fond plus léger, pas d’ombre */
+:host(.outline) .card, .card.outline {
+  background: color-mix(in oklab, var(--surface) 90%, transparent);
+  border: 1px solid var(--accent-strong);
   box-shadow: none;
 }
+:host(.outline) .header { background: color-mix(in oklab, var(--accent) 6%, transparent); }
+:host(.outline) .actions { border-top: 1px solid var(--accent-weak); }
 
-/* variants */
-:host(.elevated) .card{ box-shadow: var(--ui-shadow, 0 10px 25px rgba(0,0,0,.35)); border-color: transparent; }
-:host(.outline)  .card{ background: color-mix(in oklab, var(--surface) 95%, transparent); }
-:host(.soft)     .card{ background: color-mix(in oklab, var(--surface) 85%, transparent); }
-
-/* sizes: rythme des paddings */
-:host(.sz-sm) .header{ padding:10px 12px 0; }
-:host(.sz-sm) .content{ padding:0 12px 6px; }
-:host(.sz-sm) .actions{ padding:6px 12px 10px; }
-
-:host(.sz-md) .header{ padding:14px 16px 0; }
-:host(.sz-md) .content{ padding:0 16px 8px; }
-:host(.sz-md) .actions{ padding:8px 16px 14px; }
-
-:host(.sz-lg) .header{ padding:18px 20px 0; }
-:host(.sz-lg) .content{ padding:0 20px 10px; }
-:host(.sz-lg) .actions{ padding:10px 20px 18px; }
-
-.card.clickable{ cursor:pointer; }
-.card.clickable:hover{ transform: translateY(-1px); box-shadow: var(--ui-shadow, 0 10px 25px rgba(0,0,0,.35)); }
-.card:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
-
-.media :where(img,video,canvas,svg){ display:block; width:100%; height:auto; }
-.header{ font-weight:600; letter-spacing:.2px; }
-.actions{
-  display:flex; gap:10px; align-items:center; justify-content:flex-end;
-  border-top: 1px solid color-mix(in oklab, var(--accent) 12%, transparent);
-  background: color-mix(in oklab, var(--surface) 80%, transparent);
+/* 3) ghost : quasi transparent, accent surtout en hover / focus */
+:host(.ghost) .card, .card.ghost {
+  background: color-mix(in oklab, var(--surface) 68%, transparent);
+  border: 1px solid var(--accent-weak);
+  box-shadow: none;
 }
+:host(.ghost) .card.clickable:hover {
+  background: color-mix(in oklab, var(--surface-3) 86%, transparent);
+  border-color: var(--accent-strong);
+  box-shadow: var(--shadow);
+}
+
+/* ========= Petits détails d’accent ========= */
+:host(.primary) .header :where(h1,h2,h3) { text-shadow: 0 0 1px var(--accent-weak); }
+:host(.outline) .header :where(h1,h2,h3) { color: color-mix(in oklab, var(--text) 90%, var(--accent) 10%); }
+:host(.ghost)   .header :where(h1,h2,h3) { color: color-mix(in oklab, var(--text) 86%, var(--accent) 14%); }

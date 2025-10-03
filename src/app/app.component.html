@@ -1,6 +1,17 @@
-<axy-header></axy-header>
-<axy-card></axy-card>
-<axy-footer></axy-footer>
+<ng-container>
+<axy-header [variant]="'outline'" [accentColor]="'orange'" [size]="'md'"></axy-header>
+<axy-card [variant]="'ghost'"
+          [size]="'md'"
+          [accentColor]="'orange'"
+          [clickable]="true"
+          [maxWidth]="'360px'">
+  <h3 header>Ghost</h3>
+  <p>Très léger, hover plus visible si cliquable.</p>
+</axy-card>
+<axy-footer [variant]="'ghost'"   [accentColor]="'lightgreen'" [size]="'sm'"></axy-footer>
+</ng-container>
+
+
 
 <!-- <axy-button
     axyLongPress

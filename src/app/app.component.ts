@@ -6,7 +6,7 @@ import * as Axy from '@bridges/axy';
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    ...Object.values(Axy) as any[]
+    ...Axy.AxyComponentsPipesDirectives
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

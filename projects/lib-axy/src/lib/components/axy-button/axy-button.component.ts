@@ -1,5 +1,6 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Appearances, Sizes } from '../../types/ui.types';
+import { AxyBaseCssDirective } from 'axy-dev';
 
 @Component({
   selector: 'axy-button',
@@ -25,5 +26,6 @@ export class AxyButtonComponent {
   protected classes = computed(()=>{
     return `${this.size()} ${this.appearance()}`
   })
+
 
 }

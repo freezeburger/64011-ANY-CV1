@@ -8,5 +8,14 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "lib": {
+    "entryFile": "src/public-api.ts",
+    "styleIncludePaths": [
+      "src/styles"
+    ]
+  },
+  "assets": [
+    "src/styles/base.scss"
+  ]
 }
