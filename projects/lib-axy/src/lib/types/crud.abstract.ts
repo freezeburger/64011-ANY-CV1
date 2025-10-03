@@ -33,6 +33,8 @@ export abstract class CrudAbstract<T extends WithUniqueId> implements CrudServic
     });
   }
 
+  read(): Promise<HumanResponse<T[]>>
+  read(id: T["id"]): Promise<HumanResponse<T>>
   read(id?: T["id"] | undefined): Promise<HumanResponse<T | T[]>> {
 
     const url = id ? `${this.endpoint}/${id}` : this.endpoint;
