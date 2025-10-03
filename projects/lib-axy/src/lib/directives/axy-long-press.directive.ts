@@ -10,6 +10,7 @@ import {
   ElementRef,
   contentChild
 } from '@angular/core';
+import { Colors } from '../types/ui.types';
 
 @Directive({
   selector: '[axyLongPressTarget]'
@@ -33,7 +34,8 @@ export class AxyLongPressTargetDirective {
 export class AxyLongPressDirective {
 
   public duration = input<number>(1000); // Durée en ms
-  public color = input<'crimson' | 'lightgreen' | 'orange'>('lightgreen'); // Couleur de fond
+  public color = input<Colors>('lightgreen'); // Couleur de fond
+
   public activated = output<void>();
 
   private pressed = signal<boolean>(false);

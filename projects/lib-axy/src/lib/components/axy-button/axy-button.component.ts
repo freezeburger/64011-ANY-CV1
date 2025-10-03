@@ -1,15 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input, Input } from '@angular/core';
-
-
-/**
- * Appearances of the button
- */
-export type Appearances = 'primary' | 'outline' | 'ghost';
-
-/**
- * Sizes of the button
- */
-export type Sizes = 'sm' | 'md' | 'lg';
+import { Component, computed, input } from '@angular/core';
+import { Appearances, Sizes } from '../../types/ui.types';
 
 @Component({
   selector: 'axy-button',
