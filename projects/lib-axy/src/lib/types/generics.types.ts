@@ -20,6 +20,9 @@ export enum AcknowledgementStatus {
   ERROR = 'ERROR',
 }
 
+/**
+ * A response structure that includes a human-readable message along with the process response.
+ */
 export interface HumanResponse<T> extends ProcessResponse<T>{
   message?: string;
 }
