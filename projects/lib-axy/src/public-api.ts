@@ -16,6 +16,7 @@
  * Types
  */
 export * from './lib/types/ui.types';
+export * from './lib/types/generics.types';
 
 
 /**
