@@ -1,9 +1,12 @@
-import { AcknowledgementStatus, HumanResponse, WithUniqueId } from "axy-dev";
+import { AcknowledgementStatus, HumanResponse, WithUniqueId } from "./generics.types";
 
 /**
  * CRUD operations
+ * Should not be used directly, but through a service class
+ * @template T Type of the managed entity, must extend WithUniqueId
+ * Extends the CrudAbstract to implement it
  */
-interface CrudService<T extends WithUniqueId>/* contrainte de type */ {
+export interface CrudService<T extends WithUniqueId>/* contrainte de type */ {
 
   readonly endpoint:string
   data: T[];
