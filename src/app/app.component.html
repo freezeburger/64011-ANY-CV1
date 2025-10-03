@@ -6,7 +6,8 @@ Application
     appearance="outline"
     [disabled]="activations.first"
     (activated)=" activations.first = true ">
-  <code axyLongPressTarget>Axy Button</code>
+    <h3>Axy Button</h3>
+    <div axyLongPressTarget style="height: 5px;"></div>
 </axy-button>
 
 {{ activations.first ? 'Disabled after LongPress' : 'Enabled'}}

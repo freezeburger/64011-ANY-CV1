@@ -22,7 +22,6 @@ export class AxyLongPressTargetDirective {
 @Directive({
   selector: '[axyLongPress]',
   host: {
-    /* '[style.background]': 'background()', */
     '(mousedown)': 'start()',
     '(mouseup)': 'cancel()',
     '(mouseleave)': 'cancel()',
@@ -39,25 +38,21 @@ export class AxyLongPressDirective {
 
   private pressed = signal<boolean>(false);
   private progress = signal<number>(0);
-  private background = computed(() => `linear-gradient(to right, ${this.color()} ${this.progress()}%, transparent ${this.progress()}%)`);
+  private background = computed(() => `linear-gradient(to right, ${untracked(this.color)} ${this.progress()}%, transparent ${this.progress()}%)`);
 
   private customTarget = contentChild(AxyLongPressTargetDirective, { descendants: true});
   private host = inject(ElementRef<HTMLElement>);
-  private target:ElementRef<HTMLElement> = this.customTarget()?.host ?? this.host;
+  private target:ElementRef<HTMLElement>= this.customTarget()?.host ?? this.host;
 
   private readonly FRAME_DURATION = 1000 / 60; // Durée d'une frame en ms (~60fps) ou 16.67ms
   private readonly INCREMENT = untracked(() => 100 / (this.duration() / this.FRAME_DURATION));
 
   private timer: ReturnType<typeof setInterval> | null = null;
 
-  private activatedState = false;
 
   ngAfterViewInit() {
-    this.target = this.customTarget()?.host ?? this.host;
     console.log("LongPress Target", this.target);
-    this.activated.subscribe(() => {
-      this.activatedState = true;
-    });
+    this.activated.subscribe(() => this.activation.destroy());
   }
 
   protected start(): void {
@@ -70,7 +65,7 @@ export class AxyLongPressDirective {
 
   private activation = effect(onCleanup => {
 
-    if (this.progress() >= 100 && !this.activatedState) {
+    if (this.progress() >= 100) {
       console.log("LongPress Activated");
       this.activated.emit();
     }
