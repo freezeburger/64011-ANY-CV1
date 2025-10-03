@@ -1,32 +1,12 @@
-import { Component, Directive, inject, Injectable } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SlotTheory } from './theory/slot.theory';
-
-import { Appearances, AxyButtonComponent as AxyButton, AxyLongPressDirective, AxyLongPressTargetDirective, HeaderComponent } from '@bridges/axy';
-
-import { PipeTheory } from './theory/pipe.theory';
-import { DirectiveTheory } from './theory/directive.theory';
-import { DirectiveCompositionTheory } from './theory/directive-composition.theory';
-import { InheritanceTheory } from './theory/inheritance.theory';
-import { DirectiveInheritance, DirectiveInheritanceTheory } from './theory/directive-inheritance.theory';
-import { TemplateQueryTheory } from './theory/template-query.theory';
+import * as Axy from '@bridges/axy';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    HeaderComponent,
-    SlotTheory,
-    AxyButton,
-    PipeTheory,
-    DirectiveTheory,
-    DirectiveCompositionTheory,
-    InheritanceTheory,
-    DirectiveInheritance,
-    DirectiveInheritanceTheory,
-    TemplateQueryTheory,
-    AxyLongPressDirective,
-    AxyLongPressTargetDirective
+    ...Object.values(Axy) as any[]
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

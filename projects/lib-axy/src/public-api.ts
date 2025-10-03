@@ -26,6 +26,7 @@ export * from './lib/types/crud.type';
 export * from './lib/components/header/header.component';
 export * from './lib/components/footer/footer.component';
 export * from './lib/components/axy-button/axy-button.component';
+export * from './lib/components/axy-card/axy-card.component';
 
 /**
  * Directives
