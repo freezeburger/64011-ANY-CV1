@@ -49,7 +49,6 @@ export class AxyLongPressDirective {
 
   private timer: ReturnType<typeof setInterval> | null = null;
 
-
   ngAfterViewInit() {
     console.log("LongPress Target", this.target);
     this.activated.subscribe(() => this.activation.destroy());

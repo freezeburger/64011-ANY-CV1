@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "mock:api":"json-server --watch data/db.json --port 5050",
     "preaxy:pack":"npm run axy:build",
     "axy:pack":"npm pack ./dist/lib-axy --pack-destination artifacts",
     "axy:build":"ng build --project lib-axy",
