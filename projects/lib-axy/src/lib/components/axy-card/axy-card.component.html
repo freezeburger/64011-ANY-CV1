@@ -1,0 +1,6 @@
+<article class="card" [class.clickable]="clickable()" [attr.tabindex]="clickable() ? 0 : null">
+  <div class="media"><ng-content select="[media]"></ng-content></div>
+  <div class="header"><ng-content select="[header]"></ng-content></div>
+  <div class="content"><ng-content></ng-content></div>
+  <div class="actions"><ng-content select="[actions]"></ng-content></div>
+</article>

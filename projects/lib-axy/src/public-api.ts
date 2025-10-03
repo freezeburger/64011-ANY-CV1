@@ -12,6 +12,11 @@
  * ng build --project lib-axy
  */
 
+/**
+ * Types
+ */
+export * from './lib/types/ui.types';
+
 
 /**
  * Components

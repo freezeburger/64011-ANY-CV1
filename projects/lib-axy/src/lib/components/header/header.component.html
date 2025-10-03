@@ -1,1 +1,15 @@
-<p>header works!</p>
+<header class="hdr" [class.sticky]="sticky()" [attr.role]="'banner'">
+  <div class="row" [style.max-width]="maxWidth()">
+    <div class="side"><ng-content select="[start]"></ng-content></div>
+    <div class="center">
+      <ng-content select="[center]"></ng-content>
+      @if (title() || subtitle()) {
+      <div class="titles">
+        @if (title()) { <h1 class="title">{{ title() }}</h1> }
+        @if (subtitle()) { <p class="subtitle">{{ subtitle() }}</p> }
+      </div>
+      }
+    </div>
+    <div class="side end"><ng-content select="[end]"></ng-content></div>
+  </div>
+</header>

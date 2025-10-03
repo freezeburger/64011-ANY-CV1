@@ -1,1 +1,7 @@
-<p>footer works!</p>
+<footer class="ftr" role="contentinfo">
+  <div class="row" [style.max-width]="maxWidth()">
+    <div class="side"><ng-content select="[left]"></ng-content></div>
+    <div class="center"><ng-content></ng-content></div>
+    <div class="side end"><ng-content select="[right]"></ng-content></div>
+  </div>
+</footer>

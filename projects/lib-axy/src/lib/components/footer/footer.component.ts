@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
+import { Colors, Sizes } from '../../types/ui.types';
 
 @Component({
   selector: 'axy-footer',
@@ -8,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class FooterComponent {
 
+  maxWidth = input<string>('1100px');
+  size = input<Sizes>('md');
+
+  accentColor = input<Colors>('crimson');
+  protected hostClasses = computed(() => `sz-${this.size()} c-${this.accentColor()}`);
 }
