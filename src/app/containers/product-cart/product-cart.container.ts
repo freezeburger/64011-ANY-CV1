@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { ProductService } from '@services/product.service';
 
 @Component({
   selector: 'app-product-cart',
@@ -7,5 +8,6 @@ import { Component } from '@angular/core';
   styleUrl: './product-cart.container.scss'
 })
 export class ProductCartContainer {
-
+  protected productService = inject(ProductService);
+  protected productCount = computed(() => ` There is actually ${this.productService.data().length} product(s) available.`);
 }

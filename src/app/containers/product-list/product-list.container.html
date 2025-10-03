@@ -1,1 +1,19 @@
-<p>product-list works!</p>
+<h2>List of products</h2>
+
+@let products = productService.data();
+
+@for( p of products ; track p.id) {
+<div class="product" style="display: flex; flex-direction: row;">
+  <div style="flex-grow: 1; margin-right: 1rem;">
+    <h3>{{ p.title }}</h3>
+    <p>Price: {{ p.price | currency:'CHF':'symbol':'1.2-2' }}</p>
+  </div>
+  <div>
+    <axy-button (activated)="productService.delete(p)" axyLongPress appearance="outline" size="sm">Remove</axy-button>
+  </div>
+</div>
+}
+@empty {
+  <p>No products available</p>
+  <axy-button (click)="productService.read()">Load Products</axy-button>
+}
