@@ -19,6 +19,9 @@
       // alias pour les bridges
       "@bridges/*": [
         "./src/app/bridges/*"
+      ],
+      "@services/*": [
+        "./src/app/core/services/*"
       ]
     },
     "noImplicitReturns": true,
