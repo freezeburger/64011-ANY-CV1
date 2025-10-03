@@ -1,6 +1,8 @@
 import { Signal, WritableSignal } from "@angular/core";
 import { AcknowledgementStatus, HumanResponse, WithUniqueId } from "./generics.types";
 
+
+export type CrudEndpoint = `/api/${Lowercase<string>}s`
 /**
  * CRUD operations
  * Should not be used directly, but through a service class
@@ -9,7 +11,7 @@ import { AcknowledgementStatus, HumanResponse, WithUniqueId } from "./generics.t
  */
 export interface CrudService<T extends WithUniqueId>/* contrainte de type */ {
 
-  readonly endpoint:string
+  readonly endpoint:CrudEndpoint;
   data: WritableSignal<T[]>;
   state:AcknowledgementStatus;
 

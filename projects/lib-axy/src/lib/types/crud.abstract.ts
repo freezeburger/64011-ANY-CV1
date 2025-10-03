@@ -1,12 +1,37 @@
 import { inject, signal, Signal } from "@angular/core";
-import { CrudService } from "./crud.type";
+import { CrudEndpoint, CrudService } from "./crud.type";
 import { AcknowledgementStatus, HumanResponse, WithUniqueId } from "./generics.types";
 import { HttpClient } from "@angular/common/http";
 
-
+/**
+ * Abstract class to implement CRUD operations
+ *
+ * Implements the CrudService interface
+ *
+ * Uses Angular HttpClient to perform HTTP requests
+ * Uses Angular Signals to manage state
+ *
+ * T must extend WithUniqueId to ensure the presence of an 'id' field
+ *
+ * You must set the 'endpoint' property in the subclass constructor
+ *
+ * @example
+ * ```typescript
+ * import { Injectable } from '@angular/core';
+ * import { CrudAbstract } from 'path-to-crud.abstract';
+ * import { ProductDTO } from 'path-to-product.dto';
+ *
+ * @Injectable({
+ *   providedIn: 'root
+ * })
+ * export class ValueService extends CrudAbstract<ValueDTO> {
+ *   override endpoint = '/api/products';
+ * }
+ * ```
+ */
 export abstract class CrudAbstract<T extends WithUniqueId> implements CrudService<T> {
 
-  endpoint!: string;
+  endpoint!: CrudEndpoint;
   data = signal<T[]>([]);
 
   state: AcknowledgementStatus = AcknowledgementStatus.PENDING;

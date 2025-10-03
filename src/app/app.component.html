@@ -1,4 +1,25 @@
 <ng-container>
+  <axy-header
+      variant="outline"
+      accentColor="orange"
+      size="md"
+      title="Axyus"
+      subtitle="A modern UI component library" />
+
+  <router-outlet></router-outlet>
+
+  <axy-footer
+      variant="ghost"
+      accentColor="lightgreen"
+      size="sm">
+    <span left>© 2024 Axyus</span>
+    <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, assumenda.</span>
+    <span right>v0.1.0</span>
+  </axy-footer>
+
+</ng-container>
+
+<!-- <ng-container>
 <axy-header [variant]="'outline'" [accentColor]="'orange'" [size]="'md'"></axy-header>
 <axy-card [variant]="'ghost'"
           [size]="'md'"
@@ -10,7 +31,7 @@
 </axy-card>
 <axy-footer [variant]="'ghost'"   [accentColor]="'lightgreen'" [size]="'sm'"></axy-footer>
 </ng-container>
-
+ -->
 
 
 <!-- <axy-button

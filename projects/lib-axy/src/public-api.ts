@@ -19,6 +19,10 @@ export * from './lib/types/ui.types';
 export * from './lib/types/generics.types';
 export * from './lib/types/crud.type';
 
+/**
+ * Utils
+ */
+export * from './lib/types/crud.abstract'
 
 /**
  * Components
