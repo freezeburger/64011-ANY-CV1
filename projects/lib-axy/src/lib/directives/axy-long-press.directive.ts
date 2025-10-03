@@ -82,6 +82,7 @@ export class AxyLongPressDirective {
     console.log("LongPress Finished : Cleanup");
 
     this.timer && clearInterval(this.timer);
+
     if (!this.pressed() && this.progress() > 0 && this.progress() < 100) {
       this.progress.set(0);
     }
