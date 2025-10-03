@@ -1,10 +1,13 @@
 // axy-base-css.directive.ts
-import { Directive, Inject, OnInit } from '@angular/core';
+import { Directive, inject, OnInit } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 @Directive({ selector: '[axyBaseCss]', standalone: true })
 export class AxyBaseCssDirective implements OnInit {
-  constructor(@Inject(DOCUMENT) private doc: Document) {}
+
+
+  private doc = inject(DOCUMENT);
+
   ngOnInit() {
     if (this.doc.getElementById('axy-base-css')) return;
     const s = this.doc.createElement('style');
